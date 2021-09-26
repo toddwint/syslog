@@ -18,7 +18,7 @@ This image was created for lab setups where the need to verify syslog messages a
     - pause the flow
     - search through the flow
     - highlight multiple rows
-- Syslog messages are persistant if you map the directory `/var/log/remote`
+- Syslog messages are persistent if you map the directory `/var/log/remote`
 
 ## Sample `config.txt` file
 
