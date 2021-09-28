@@ -6,19 +6,19 @@
 
 <https://github.com/toddwint/syslog>
 
-`syslog-ng` remote server docker image for simple lab syslog testing.
+SYSLOG remote server docker image for simple lab SYSLOG testing.
 
-This image was created for lab setups where the need to verify syslog messages are being sent to a customer owned syslog.
+This image was created for lab setups where the need to verify SYSLOG messages are being sent to a customer owned SYSLOG.
 
 ## Features
 
-- Receive syslog messages from clients.
-- View remote syslog messages in a web browser ([frontail](https://github.com/mthenw/frontail))
+- Receive SYSLOG messages from clients.
+- View remote SYSLOG messages in a web browser ([frontail](https://github.com/mthenw/frontail))
     - tail the file
     - pause the flow
     - search through the flow
     - highlight multiple rows
-- Syslog messages are persistent if you map the directory `/var/log/remote`
+- SYSLOG messages are persistent if you map the directory `/var/log/remote`
 
 ## Sample `config.txt` file
 
@@ -26,6 +26,7 @@ This image was created for lab setups where the need to verify syslog messages a
 TZ=UTC
 IPADDR=127.0.0.1
 HTTPPORT=9001
+HOSTNAME=syslogsrvr
 ```
 
 ## Sample docker run command
@@ -37,11 +38,13 @@ cp template/webadmin.html.template webadmin.html
 sed -i "s/IPADDR/$IPADDR:$HTTPPORT/g" webadmin.html
 docker run -dit --rm \
     --name syslog \
+    -h $HOSTNAME \
     -p $IPADDR:514:514/udp \
     -p $IPADDR:$HTTPPORT:$HTTPPORT \
     -v syslog:/var/log/remote/ \
     -e TZ=$TZ \
     -e HTTPPORT=$HTTPPORT \
+    -e HOSTNAME=$HOSTNAME \
     --cap-add=NET_ADMIN \
     toddwint/syslog
 ```
@@ -55,7 +58,8 @@ See my github page (referenced above).
 
 Open the `webadmin.html` file.
 
-Or just type in your browser `http://localhost` or the IP you set in the config.  
+Or just type in your browser `http://<ip_address>:<port>`
+
 
 ## Issues?
 
