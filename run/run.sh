@@ -12,4 +12,4 @@ docker run -dit --rm \
     -e HTTPPORT=$HTTPPORT \
     -e HOSTNAME=$HOSTNAME \
     --cap-add=NET_ADMIN \
-    toddwint/syslog bash
+    toddwint/syslog
