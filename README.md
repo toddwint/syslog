@@ -2,66 +2,88 @@
 
 ## Info
 
-<https://hub.docker.com/r/toddwint/syslog>
+`syslog` docker image for simple lab testing applications.
 
-<https://github.com/toddwint/syslog>
+Docker Hub: <https://hub.docker.com/r/toddwint/syslog>
 
-SYSLOG remote server docker image for simple lab SYSLOG testing.
+GitHub: <https://github.com/toddwint/syslog>
 
-This image was created for lab setups where the need to verify SYSLOG messages are being sent to a customer owned SYSLOG.
 
 ## Features
 
-- Receive SYSLOG messages from clients.
-- View remote SYSLOG messages in a web browser ([frontail](https://github.com/mthenw/frontail))
-    - tail the file
-    - pause the flow
-    - search through the flow
-    - highlight multiple rows
-- SYSLOG messages are persistent if you map the directory `/var/log/remote`
+- Ubuntu base image
+- Plus:
+  - syslog-ng
+  - tmux
+  - python3-minimal
+  - iproute2
+  - tzdata
+  - [ttyd](https://github.com/tsl0922/ttyd)
+    - View the terminal in your browser
+  - [frontail](https://github.com/mthenw/frontail)
+    - View logs in your browser
+    - Mark/Highlight logs
+    - Pause logs
+    - Filter logs
+  - [tailon](https://github.com/gvalkov/tailon)
+    - View multiple logs and files in your browser
+    - User selectable `tail`, `grep`, `sed`, and `awk` commands
+    - Filter logs and files
+    - Download logs to your computer
+
 
 ## Sample `config.txt` file
 
 ```
 TZ=UTC
 IPADDR=127.0.0.1
-HTTPPORT=9001
-HOSTNAME=syslogsrvr
+HTTPPORT1=8080
+HTTPPORT2=8081
+HTTPPORT3=8082
+HTTPPORT4=8083
+HOSTNAME=syslogsrvr01
 ```
 
-## Sample docker run command
+
+## Sample docker run script
 
 ```
 #!/usr/bin/env bash
-source config.txt
-cp template/webadmin.html.template webadmin.html
-sed -i "s/IPADDR/$IPADDR:$HTTPPORT/g" webadmin.html
-docker run -dit --rm \
-    --name syslog \
-    -h $HOSTNAME \
+REPO=toddwint
+APPNAME=syslog
+source "$(dirname "$(realpath $0)")"/config.txt
+
+# Create the docker container
+docker run -dit \
+    --name "$HOSTNAME" \
+    -h "$HOSTNAME" \
     -p $IPADDR:514:514/udp \
-    -p $IPADDR:$HTTPPORT:$HTTPPORT \
-    -v syslog:/var/log/remote/ \
-    -e TZ=$TZ \
-    -e HTTPPORT=$HTTPPORT \
-    -e HOSTNAME=$HOSTNAME \
-    --cap-add=NET_ADMIN \
-    toddwint/syslog
+    -p "$IPADDR":"$HTTPPORT1":"$HTTPPORT1" \
+    -p "$IPADDR":"$HTTPPORT2":"$HTTPPORT2" \
+    -p "$IPADDR":"$HTTPPORT3":"$HTTPPORT3" \
+    -p "$IPADDR":"$HTTPPORT4":"$HTTPPORT4" \
+    -e TZ="$TZ" \
+    -e HTTPPORT1="$HTTPPORT1" \
+    -e HTTPPORT2="$HTTPPORT2" \
+    -e HTTPPORT3="$HTTPPORT3" \
+    -e HTTPPORT4="$HTTPPORT4" \
+    -e HOSTNAME="$HOSTNAME" \
+    -e APPNAME="$APPNAME" \
+    ${REPO}/${APPNAME}
 ```
-
-## Sample webadmin.html.template file
-
-See my github page (referenced above).
 
 
 ## Login page
 
 Open the `webadmin.html` file.
 
-Or just type in your browser `http://<ip_address>:<port>`
+- Or just type in your browser: 
+  - `http://<ip_address>:<port1>` or
+  - `http://<ip_address>:<port2>` or
+  - `http://<ip_address>:<port3>`
+  - `http://<ip_address>:<port4>`
 
 
 ## Issues?
 
-Make sure if you set an IP that machine has the same IP configured on an interface.
-
+Make sure to set the IP on the host and that the ports being used are not currently being used by the host.

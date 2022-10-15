@@ -1,31 +1,30 @@
-FROM ubuntu:focal
+FROM toddwint/mybaseimage
 COPY scripts /opt/syslog/scripts
-EXPOSE 514/udp 9001
 ENV DEBIAN_FRONTEND=noninteractive \
     TZ=UTC \
-    HTTPPORT=9001 \
-    HOSTNAME=syslogsrvr
+    HTTPPORT1=8080 \
+    HTTPPORT2=8081 \
+    HTTPPORT3=8082 \
+    HTTPPORT4=8083 \
+    HOSTNAME=syslogsrvr \
+    APPNAME=syslog
 RUN apt-get update \
     && \
     apt-get install -y \
-    tzdata \
-    iproute2 \
-    wget \
     syslog-ng \
-    && \
-    wget -q https://github.com/mthenw/frontail/releases/download/v4.9.1/frontail-linux -O /usr/local/bin/frontail \
-    && \
-    chmod 755 /usr/local/bin/frontail \
     && \
     mkdir -p /var/log/remote \
     && \
     touch /var/log/remote/syslog.log \
     && \
-    apt-get remove -y \
-    wget \
+    echo $HOSTNAME > /etc/hostname \
+    && \
+    cd /opt \
+    && \
+    rm -rf /opt/mybaseimage \
     && \
     apt-get autoremove -y \
     && \
     rm -rf /var/lib/apt/lists/*
-WORKDIR /opt/syslog/
+WORKDIR /opt/syslog/scripts
 CMD ["/opt/syslog/scripts/startup.sh"]
