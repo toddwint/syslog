@@ -1,5 +1,5 @@
 FROM toddwint/mybaseimage
-COPY scripts /opt/syslog/scripts
+COPY app /opt/syslog
 ENV DEBIAN_FRONTEND=noninteractive \
     TZ=UTC \
     HTTPPORT1=8080 \
@@ -19,12 +19,8 @@ RUN apt-get update \
     && \
     echo $HOSTNAME > /etc/hostname \
     && \
-    cd /opt \
-    && \
-    rm -rf /opt/mybaseimage \
-    && \
     apt-get autoremove -y \
     && \
     rm -rf /var/lib/apt/lists/*
-WORKDIR /opt/syslog/scripts
+WORKDIR /opt/syslog/debug
 CMD ["/opt/syslog/scripts/startup.sh"]
