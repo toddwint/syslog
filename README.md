@@ -1,6 +1,6 @@
 ---
 title: README
-date: 2023-09-13
+date: 2023-11-03
 ---
 
 # toddwint/syslog
@@ -61,21 +61,21 @@ Create the docker macvlan interface.
 ```bash
 docker network create -d macvlan --subnet=192.168.10.0/24 --gateway=192.168.10.254 \
     --aux-address="mgmt_ip=192.168.10.2" -o parent="eth0" \
-    --attachable "eth0-macvlan"
+    --attachable "syslog01"
 ```
 
 Create a management macvlan interface.
 
 ```bash
-sudo ip link add "eth0-macvlan" link "eth0" type macvlan mode bridge
-sudo ip link set "eth0-macvlan" up
+sudo ip link add "syslog01" link "eth0" type macvlan mode bridge
+sudo ip link set "syslog01" up
 ```
 
 Assign an IP on the management macvlan interface plus add routes to the docker container.
 
 ```bash
-sudo ip addr add "192.168.10.2/32" dev "eth0-macvlan"
-sudo ip route add "192.168.10.0/24" dev "eth0-macvlan"
+sudo ip addr add "192.168.10.2/32" dev "syslog01"
+sudo ip route add "192.168.10.0/24" dev "syslog01"
 ```
 
 
@@ -84,7 +84,7 @@ sudo ip route add "192.168.10.0/24" dev "eth0-macvlan"
 ```bash
 docker run -dit \
     --name "syslog01" \
-    --network "eth0-macvlan" \
+    --network "syslog01" \
     --ip "192.168.10.1" \
     -h "syslog01" \
     -p "192.168.10.1:514:514/udp" \
@@ -133,6 +133,6 @@ services:
 
 networks:
     default:
-        name: "eth0-macvlan"
+        name: "syslog01"
         external: true
 ```
