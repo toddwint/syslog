@@ -1,0 +1,90 @@
+[
+ [
+  "Launch tmux",
+  "/opt/syslog/scripts/tmux.sh"
+ ],
+ [
+  "Search logs",
+  [
+   [
+    "syslog log",
+    "tail -F -n +1 /opt/syslog/logs/syslog.log | fzf --tac --no-sort"
+   ]
+  ]
+ ],
+ [
+  "View logs",
+  [
+   [
+    "syslog log",
+    "more /opt/syslog/logs/syslog.log"
+   ]
+  ]
+ ],
+ [
+  "View configuration",
+  [
+   [
+    "syslog configuration",
+    "more /etc/syslog-ng/syslog-ng.conf"
+   ],
+   [
+    "syslog default configuration",
+    "more /etc/default/syslog-ng"
+   ],
+   [
+    "syslog logrotate configuration",
+    "more /etc/logrotate.d/syslog-ng"
+   ],
+   [
+    "IP addresses",
+    "ip addr show | more"
+   ],
+   [
+    "Routing table",
+    "ip route show | more"
+   ],
+   [
+    "ARP or NDISC cache",
+    "ip neighbor show | more"
+   ],
+   [
+    "Network devices",
+    "ip link show | more"
+   ]
+  ]
+ ],
+ [
+  "Debug scripts",
+  [
+   [
+    "Send test syslog message",
+    "/opt/syslog/debug/send_test_syslog_msg.sh"
+   ],
+   [
+    "Show processes",
+    "ps ax | more"
+   ],
+   [
+    "Show sockets",
+    "ss --all --numeric --processes | more"
+   ],
+   [
+    "ttyd1 log",
+    "more /opt/syslog/logs/ttyd1.log"
+   ],
+   [
+    "ttyd2 log",
+    "more /opt/syslog/logs/ttyd2.log"
+   ],
+   [
+    "frontail log",
+    "more /opt/syslog/logs/frontail.log"
+   ],
+   [
+    "tailon log",
+    "more /opt/syslog/logs/tailon.log"
+   ]
+  ]
+ ]
+]
