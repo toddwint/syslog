@@ -43,7 +43,8 @@ else
 fi
 
 # Print first message to either the app log file or syslog
-echo "$(date -Is) [Start of $APPNAME log file]" >> /opt/"$APPNAME"/logs/"$APPNAME".log
+echo "$(date -Is) [Start of $APPNAME log file]" \
+    >> /opt/"$APPNAME"/logs/"$APPNAME".log
 
 # Modify configuration files or customize container
 if [ -e /opt/"$APPNAME"/scripts/.firstrun ]; then

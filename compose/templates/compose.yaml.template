@@ -2,7 +2,7 @@ name: ${HOSTNAME}
 
 services:
   syslog:
-    image: toddwint/syslog
+    image: toddwint/${APPNAME}
     hostname: ${HOSTNAME}
     ports:
         - "${IPADDR}:514:514/udp"
